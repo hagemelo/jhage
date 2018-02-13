@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.jhage.pedido_api.modelo.ItemPedido;
-import br.com.jhage.pedido_api.modelo.Produto;
 
 public class ItemPedidoTest {
 	
@@ -14,25 +13,25 @@ public class ItemPedidoTest {
 	@Test
 	public void totalItemPedidoIgualaZero(){
 		
-		Assert.assertEquals(ZERO, new ItemPedido(null).total());
+		Assert.assertEquals(ZERO, new ItemPedido(null, null, null).total());
 	}
 	
-//	@Test
-//	public void totalItemPedidoIgualaValorDefaultCenarioFeliz(){
-//		
-//		Assert.assertEquals(VALOR_DEFAULT, new ItemPedido(2).comProduto(new Produto("Teste", 1.4)).total());
-//	}
+	@Test
+	public void totalItemPedidoIgualaValorDefaultCenarioFeliz(){
+		
+		Assert.assertEquals(VALOR_DEFAULT, new ItemPedido("Teste", 1.4, 2).total());
+	}
 	
-//	@Test
-//	public void totalItemPedidoIgualaValorDefaultComQtdNull(){
-//		
-//		Assert.assertEquals(VALOR_DEFAULT, new ItemPedido(null).comProduto(new Produto("Teste", 2.8)).total());
-//	}
-//	
-//	@Test
-//	public void totalItemPedidoIgualaValorDefaultComValorNull(){
-//		
-//		Assert.assertEquals(ZERO, new ItemPedido(2).comProduto(new Produto("Teste", null)).total());
-//	}
+	@Test
+	public void totalItemPedidoIgualaValorDefaultComQtdNull(){
+		
+		Assert.assertEquals(VALOR_DEFAULT, new ItemPedido("Teste", 2.8, null).total());
+	}
+	
+	@Test
+	public void totalItemPedidoIgualaValorDefaultComValorNull(){
+		
+		Assert.assertEquals(ZERO, new ItemPedido("Teste", null, 2).total());
+	}
 	
 }

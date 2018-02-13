@@ -13,6 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * 
+ * @author Alexnsander Melo
+ * @since 15/01/2017
+ *
+ */
+
 @Configuration
 public class SimpleCORSFilter  implements Filter  {
 

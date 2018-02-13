@@ -21,10 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.jhage.pedido_api.constante.StatusPedido;
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
-import br.com.jhage.pedido_api.excecao.PedidoException;
-import br.com.jhage.pedido_api.helper.FormatDateHelper;
 import br.com.jhage.pedido_api.helper.Helper;
 import br.com.jhage.pedido_api.listen.PedidoListen;
 
@@ -34,7 +34,7 @@ import br.com.jhage.pedido_api.listen.PedidoListen;
  * @since 15/01/2017
  *
  */
-@Entity(name="PEDIDO_GABI")
+@Entity
 @Table
 @EntityListeners({ PedidoListen.class })
 public class Pedido implements JhageEntidade{
@@ -63,7 +63,8 @@ public class Pedido implements JhageEntidade{
 	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
 	
-	@OneToMany(mappedBy = "pedido", cascade= CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval=true)
+	@JsonBackReference
+	@OneToMany(mappedBy = "pedido", cascade= CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
 	private Set<ItemPedido> itens;
 	
 	
@@ -93,13 +94,9 @@ public class Pedido implements JhageEntidade{
 		return  itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
 	}
 	
-	public void tratarNull(){
+	public void addItemPedido(ItemPedido item) {
 		
-		this.tratarNUllContato();
-		this.tratarNUllEntrega();
-		this.tratarNUllTroco();
-		this.tratarNUllCadastro();
-		this.tratarNUllStatus();
+		this.getItens().add(item);
 	}
 	
 	public boolean isRealizado(){
@@ -144,6 +141,11 @@ public class Pedido implements JhageEntidade{
 	}
 
 	public Set<ItemPedido> getItens() {
+		
+		if (Helper.ENULO.enulo(this.itens)) {
+			
+			this.itens = new HashSet<ItemPedido>();
+		}
 		return itens;
 	}
 	
@@ -151,15 +153,25 @@ public class Pedido implements JhageEntidade{
 		return cadastro;
 	}
 	
-	public String getCadastroToString(){
+//	public String getCadastroToString(){
+//		
+//		try{
+//			return FormatDateHelper.converterDataParaCaracter(this.cadastro, PADRAO_DATAHORA);
+//		
+//		}catch (PedidoException e) {
+//			
+//			return ValoresConstantes.STRING_VAZIO;
+//		}
+//	}
+	
+	public void tratarNull(){
 		
-		try{
-			return FormatDateHelper.converterDataParaCaracter(this.cadastro, PADRAO_DATAHORA);
-		
-		}catch (PedidoException e) {
-			
-			return ValoresConstantes.STRING_VAZIO;
-		}
+		this.tratarNUllContato();
+		this.tratarNUllEntrega();
+		this.tratarNUllTroco();
+		this.tratarNUllCadastro();
+		this.tratarNUllStatus();
+		this.tratarNullItens();
 	}
 	
 	private void tratarNUllContato(){
@@ -176,6 +188,13 @@ public class Pedido implements JhageEntidade{
 			
 			this.entrega = ValoresConstantes.STRING_VAZIO;
 		}
+	}
+	
+	private void tratarNullItens() {
+		
+		Pedido p = this;
+		itens.stream().filter(i-> Helper.ENULO.enulo(i.getPedido())).forEach(i -> i.comPedido(p));
+//		itens.forEach(i -> i.comPedido(p));
 	}
 
 	private void tratarNUllTroco(){

@@ -10,5 +10,7 @@ public class ConverterDataParaCaracterException extends PedidoException{
 	
 		super(MENSAGEM);
 	}
+	
+	
 
 }

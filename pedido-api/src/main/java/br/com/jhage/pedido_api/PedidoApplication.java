@@ -10,14 +10,4 @@ public class PedidoApplication {
 		SpringApplication.run(PedidoApplication.class);
 	}
 
-//	@Bean
-//	public WebMvcConfigurer corsConfigurer() {
-//		return new WebMvcConfigurerAdapter() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/produto").allowedOrigins("http://localhost:8080");
-//			}
-//		};
-//	}
-
 }

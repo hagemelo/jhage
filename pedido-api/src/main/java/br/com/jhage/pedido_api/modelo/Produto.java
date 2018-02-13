@@ -20,7 +20,7 @@ import br.com.jhage.pedido_api.helper.Helper;
  * @since 15/01/2017
  *
  */
-@Entity(name="PRODUTO_GABI")
+@Entity
 @Table
 public class Produto implements JhageEntidade{
 

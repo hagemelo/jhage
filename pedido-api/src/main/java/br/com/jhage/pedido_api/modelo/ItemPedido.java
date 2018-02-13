@@ -12,6 +12,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.helper.Helper;
 
@@ -21,7 +23,7 @@ import br.com.jhage.pedido_api.helper.Helper;
  * @since 15/01/2017
  *
  */
-@Entity(name="ITEM_PEDIDO_GABI")
+@Entity
 @Table
 public class ItemPedido implements JhageEntidade{
 	
@@ -42,18 +44,19 @@ private static final long serialVersionUID = 1L;
 	
 	private String descricao;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pedido_ID", referencedColumnName = "pedido_ID")
+	@JsonBackReference
+	@ManyToOne
 	private Pedido pedido;
 	
 	ItemPedido(){
 		
 	}
 	
-	public ItemPedido(Integer quantidade){
+	public ItemPedido(String descricao, Double valor, Integer quantidade){
 		
 		this.quantidade = Helper.ENULO.enulo(quantidade)?ValoresConstantes.UM:quantidade;
-		this.valor = 0.;
+		this.valor 		= Helper.ENULO.enulo(valor)?ValoresConstantes.DOUBLE_ZERO:valor;
+		this.descricao 	= Helper.ENULO.enulo(descricao)?ValoresConstantes.STRING_VAZIO:descricao;
 	}
 	
 	@Override

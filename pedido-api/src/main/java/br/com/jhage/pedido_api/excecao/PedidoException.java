@@ -1,6 +1,8 @@
 package br.com.jhage.pedido_api.excecao;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 
 public class PedidoException extends Exception {
@@ -37,6 +39,11 @@ public class PedidoException extends Exception {
 				DEFAULT + " " + cause.getMessage());
 	}
 
+	public ResponseEntity<RespostaErro> respostaErro(){
+		
+		return new ResponseEntity<RespostaErro>(new RespostaErro(this.getMessage()),  HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
 	@Override
 	public String getMessage() {
 
