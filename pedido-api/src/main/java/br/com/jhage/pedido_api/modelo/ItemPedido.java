@@ -2,20 +2,20 @@ package br.com.jhage.pedido_api.modelo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.helper.Helper;
+import br.com.jhage.pedido_api.helper.NumberHelp;
 
 /**
  * 
@@ -72,7 +72,19 @@ private static final long serialVersionUID = 1L;
     	}
 		return this;
 	}
-	
+    
+    @JsonProperty
+	public String totalString(){
+		
+		return NumberHelp.parseDoubleToString(this.total());
+	}
+    
+    @JsonProperty
+	public String valorString(){
+		
+		return NumberHelp.parseDoubleToString(this.getValor());
+	}
+    
 	public Double total() {
 		
 		Double result =ValoresConstantes.DOUBLE_ZERO;

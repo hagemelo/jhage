@@ -22,16 +22,21 @@ public class ValoresConstantes {
 	public static final String REQUESTMAPPING_ATENDIMENTO = "/atendimento";
 	public static final String REQUESTMAPPING_CADASTROPRODUTO = "/cadastro/produto";
 	public static final String REQUESTMAPPING_PEDIDOS_DO_DIA = "/pedidosdodia";
-	
-	
-	
+	public static final String REQUESTMAPPING_ITENS_DO_PEDIDO = "/itensdopedido/{id}";
+	public static final String REQUESTMAPPING_PEDIDO_PRONTO = "/pedidopronto/{id}";
+	public static final String REQUESTMAPPING_PEDIDO_ENTREGUE = "/pedidoentregue/{id}";
+	public static final String REQUESTMAPPING_PEDIDO_CANCELADO = "/pedidocancelado/{id}";
 	
 	/**
 	 * QUERIES
 	 */
 	
 	public static final String QUERY_CARREGAR_PEDIDOS_PORDATA = "select p "
-															  + "from Pedido p join FETCH p.itens i "
+															  + "from Pedido p "
 															  + "where to_char(p.cadastro, 'dd/MM/yyyy') = :hoje "
 															  + "and not p.status like 'CANCELADO'";
+	
+	public static final String QUERY_CARREGAR_ITENS_DO_PEDIDO = "select i "
+															  + "from ItemPedido i join i.pedido p "
+															  + "where p.id =:idPedido";
 }

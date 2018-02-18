@@ -9,6 +9,12 @@ import org.springframework.data.repository.query.Param;
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.modelo.Pedido;
 
+/**
+ * 
+ * @author Alexsander Melo
+ * @since 11/02/2018
+ *
+ */
 public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 	
 	@Query(ValoresConstantes.QUERY_CARREGAR_PEDIDOS_PORDATA)

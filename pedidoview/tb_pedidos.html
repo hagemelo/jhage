@@ -1,0 +1,18 @@
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th>Contato</th>
+      <th>Entrega</th>
+      <th>Troco</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="pedido in pedidos">
+      <td>{{pedido.contato}}</td>
+      <td>{{pedido.entrega}}</td>
+      <td>{{pedido.trocoString}}</td>
+      <td>{{pedido.totalString}}</td>
+    </tr>
+  </tbody>
+</table>

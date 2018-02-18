@@ -22,10 +22,13 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.jhage.pedido_api.constante.StatusPedido;
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.helper.Helper;
+import br.com.jhage.pedido_api.helper.NumberHelp;
 import br.com.jhage.pedido_api.listen.PedidoListen;
 
 /**
@@ -40,7 +43,6 @@ import br.com.jhage.pedido_api.listen.PedidoListen;
 public class Pedido implements JhageEntidade{
 	
 	private static final long serialVersionUID = 1L;
-	private final static String PADRAO_DATAHORA = "dd/MM/yyyy hh:mi"; 
 	
 	@Version
 	Integer versao;
@@ -57,6 +59,7 @@ public class Pedido implements JhageEntidade{
 	
 	private Double troco;
 	
+	@JsonFormat(pattern="dd/MM/YYYY")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date cadastro;
 	
@@ -89,9 +92,21 @@ public class Pedido implements JhageEntidade{
 		return this.id;
 	}
 	
+	@JsonProperty
+	public String totalString(){
+		
+		return NumberHelp.parseDoubleToString(itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum());
+	}
+	
+	@JsonProperty
+	public String trocoString() {
+		
+		return NumberHelp.parseDoubleToString(this.troco);
+	}
+	
 	public Double total(){
 		
-		return  itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
+		return itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
 	}
 	
 	public void addItemPedido(ItemPedido item) {
@@ -99,9 +114,22 @@ public class Pedido implements JhageEntidade{
 		this.getItens().add(item);
 	}
 	
+	@JsonProperty
 	public boolean isRealizado(){
 		
 		return StatusPedido.REALIZADO.equals(this.status);
+	}
+	
+	@JsonProperty
+	public boolean isPronto(){
+		
+		return StatusPedido.PRONTO.equals(this.status);
+	}
+	
+	@JsonProperty
+	public boolean isEntregue(){
+		
+		return StatusPedido.ENTREGUE.equals(this.status);
 	}
 	
 	public void pronto(){
@@ -125,18 +153,22 @@ public class Pedido implements JhageEntidade{
 	}
 	
 	public String getContato() {
+		
 		return contato;
 	}
 
 	public String getEntrega() {
+		
 		return entrega;
 	}
 
 	public Double getTroco() {
+		
 		return troco;
 	}
 
 	public StatusPedido getStatus() {
+		
 		return status;
 	}
 
@@ -150,19 +182,9 @@ public class Pedido implements JhageEntidade{
 	}
 	
 	public Date getCadastro() {
+		
 		return cadastro;
 	}
-	
-//	public String getCadastroToString(){
-//		
-//		try{
-//			return FormatDateHelper.converterDataParaCaracter(this.cadastro, PADRAO_DATAHORA);
-//		
-//		}catch (PedidoException e) {
-//			
-//			return ValoresConstantes.STRING_VAZIO;
-//		}
-//	}
 	
 	public void tratarNull(){
 		

@@ -11,8 +11,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.com.jhage.pedido_api.constante.Status;
 import br.com.jhage.pedido_api.helper.Helper;
+import br.com.jhage.pedido_api.helper.NumberHelp;
 
 /**
  * 
@@ -44,6 +47,12 @@ public class Produto implements JhageEntidade{
 	
 	Produto(){
 		
+	}
+	
+	@JsonProperty
+	public String valorString(){
+		
+		return NumberHelp.parseDoubleToString(this.getValor());
 	}
 	
 	public Produto(String descricao , Double valor){

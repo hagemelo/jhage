@@ -2,25 +2,41 @@
 <html ng-app="appPedido">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap-responsive.css">
-
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/docs.css">
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/kickstart.css">
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/kickstart.css">
-	<link rel="stylesheet" type="text/css" href="lib/bootstrap/kickstart.css">
-
-	<script src="lib/angular/angular.js"></script>   
-    <script src="appPedido.js"></script>   
- 
-
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css" />
+	<script src="lib/angular/angular.js"/></script>   
+	<script src="appPedido.js"/></script>  
 </head>
 
-<body>
-	<div ng-controller="pedidocontroller">
-		{{message}}
+<body ng-controller="pedidocontroller">
+
+
+	<div class="container">
+	  <div class="row">
+	    <div class="col">
+	      <div ng-include="'Menu.html'"/>
+	    </div>
+	   
+	  
+	    <div class="col">
+	      <div ng-include="'tb_pedidos.html'"/>
+	    </div>
+
+	    <div class="col">
+
+	    	<button type="button" class="btn btn-primary" ng-disabled="habilitarButtonnovopedido" ng-click="novopedido()">Novo Pedido</button>
+			
+	    </div>
+
+	    <div class="col">
+	      <div ng-include="'form_pedido.html'"/>
+	    </div>
+
+	  </div>
 	</div>
 
-
+	<script src="lib/bootstrap/jquery-3.2.1.slim.min.js"></script>
+	<script src="lib/bootstrap/popper.min.js"></script>
+	<script src="lib/bootstrap/bootstrap.min.js"></script>
+  
 </body>
 </html>

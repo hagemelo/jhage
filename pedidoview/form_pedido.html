@@ -1,0 +1,31 @@
+ <form ng-show="showformnovopedido">
+ 	
+ 	<div class="form-group row">
+    	<label for="Contato" class="col-sm-2 col-form-label">Contato</label>
+    	<div class="col-sm-4">
+      		<input type="text" class="form-control" id="Contato" placeholder="Contato..." ng-model="novopedido.contato" />
+
+    	</div>
+  	</div>
+
+  	<div class="form-group row">
+    	<label for="Entrega" class="col-sm-2 col-form-label">Entrega</label>
+    	<div class="col-sm-4">
+      		<input type="text" class="form-control" id="Entrega" placeholder="Entrega..." ng-model="novopedido.entrega" />
+    	</div>
+  	</div>
+
+    <div class="form-group row">
+    	<label for="Troco" class="col-sm-2 col-form-label">Troco</label>
+    	<div class="col-sm-4">
+      		<input type="text" class="form-control" id="Troco" placeholder="Troco..." ng-model="novopedido.troco" onkeypress="onlydecimal(event)"/>
+    	</div>
+  	</div>
+    
+    <div class="form-group">
+    	<label for="Produtos">Produtos</label>
+	    <select class="form-control col-sm-4" id="Produtos">
+	      <option ng-repeat="produto in produtos">{{produto.descricao}} -  {{produto.valorString}} </option>
+	    </select>
+  </div>      
+</form>
