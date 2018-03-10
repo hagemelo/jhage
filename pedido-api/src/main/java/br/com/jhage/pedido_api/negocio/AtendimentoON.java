@@ -55,6 +55,15 @@ public class AtendimentoON {
 		return result;
 	}
 	
+	public List<Pedido> carregarPedidoCancelados() throws PedidoException{
+		
+		List<Pedido> result = null;
+		String hoje;
+		hoje = FormatDateHelper.converterDataParaCaracter(new Date());
+		result = repository.carregarPedidoCancelados(hoje);
+		return result;
+	}
+	
 	public Pedido pedidoPronto(long idpedido) throws PedidoException{
 		
 		Pedido result = repository.findOne(idpedido);

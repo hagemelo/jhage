@@ -34,7 +34,16 @@ public class ValoresConstantes {
 	public static final String QUERY_CARREGAR_PEDIDOS_PORDATA = "select p "
 															  + "from Pedido p "
 															  + "where to_char(p.cadastro, 'dd/MM/yyyy') = :hoje "
-															  + "and not p.status like 'CANCELADO'";
+															  + "and not p.status like 'CANCELADO' "
+															  + "order by p.cadastro";
+	
+	
+	public static final String QUERY_CARREGAR_PEDIDOS_CANCELADOS = "select p "
+																  + "from Pedido p "
+																  + "where to_char(p.cadastro, 'dd/MM/yyyy') = :hoje "
+																  + "and p.status like 'CANCELADO'"
+																  + " order by p.cadastro";
+	
 	
 	public static final String QUERY_CARREGAR_ITENS_DO_PEDIDO = "select i "
 															  + "from ItemPedido i join i.pedido p "

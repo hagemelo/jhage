@@ -11,26 +11,34 @@
 
 
 	<div class="container">
+	  
+	  <!--MENU-->
+	  <div class="row">
+	    <div class="col align-self-start">
+	      <div ng-include="'Menu.html'"></div>
+	  	</div> 
+	  </div> 
+
+	  <!--TABELA DE PEDIDOS-->
+	  <div class="row">
+	    <div class="col border border-info rounded">
+	      <h3>#Pedidos</h3>
+	      <div ng-include="'tb_pedidos.html'"></div>
+	    </div> 
+	  </div> 
+
+	  <!--BOTÃO DE INCLUSÃO-->
 	  <div class="row">
 	    <div class="col">
-	      <div ng-include="'Menu.html'"/>
+			<button type="button" class="btn btn-primary" ng-disabled="habilitarButtonnovopedido" ng-click="novopedido()" >Novo Pedido</button>
 	    </div>
-	   
-	  
-	    <div class="col">
-	      <div ng-include="'tb_pedidos.html'"/>
-	    </div>
+	  </div> 
 
-	    <div class="col">
-
-	    	<button type="button" class="btn btn-primary" ng-disabled="habilitarButtonnovopedido" ng-click="novopedido()">Novo Pedido</button>
-			
-	    </div>
-
-	    <div class="col">
-	      <div ng-include="'form_pedido.html'"/>
-	    </div>
-
+	  <!--FORM NOVO PEDIDO-->
+	  <div class="row" ng-show="showformnovopedido">
+	    <div class="col border border-info rounded">
+	    	<h3>#Novo Pedido</h3>
+	    	<div ng-include="'form_pedido.html'"></div>
 	  </div>
 	</div>
 

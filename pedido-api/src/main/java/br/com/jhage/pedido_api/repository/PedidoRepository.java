@@ -20,4 +20,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 	@Query(ValoresConstantes.QUERY_CARREGAR_PEDIDOS_PORDATA)
 	public List<Pedido> carregarPedidoPorData(@Param("hoje") String data);
 	
+	@Query(ValoresConstantes.QUERY_CARREGAR_PEDIDOS_CANCELADOS)
+	public List<Pedido> carregarPedidoCancelados(@Param("hoje") String data);
+	
 }

@@ -55,6 +55,17 @@ public class Produto implements JhageEntidade{
 		return NumberHelp.parseDoubleToString(this.getValor());
 	}
 	
+	@JsonProperty
+	public String produto() {
+		
+		StringBuffer result = new StringBuffer()
+				.append("R$ ")
+				.append(this.valorString())
+				.append(" - ")
+				.append(this.getDescricao());
+		return result.toString();
+	}
+		
 	public Produto(String descricao , Double valor){
 		
 		this.descricao = Helper.ENULO.enulo(descricao)?"":descricao;

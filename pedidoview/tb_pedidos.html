@@ -1,10 +1,20 @@
-<table class="table">
+
+<div class="alert alert-warning" role="alert" ng-show="!pedidoscarregados && !errobackendcarregarpedidos">
+  Não Há Pedidos! {{statusRetorno}}
+</div>
+
+<div class="alert alert-danger" role="alert"  ng-show="errobackendcarregarpedidos">
+Erro ao Carregar Pedidos!
+</div>
+
+<table class="table" ng-show="pedidoscarregados && !errobackendcarregarpedidos">
   <thead class="thead-dark">
     <tr>
       <th>Contato</th>
       <th>Entrega</th>
       <th>Troco</th>
       <th>Total</th>
+      <th>#</th>
     </tr>
   </thead>
   <tbody>
@@ -13,6 +23,13 @@
       <td>{{pedido.entrega}}</td>
       <td>{{pedido.trocoString}}</td>
       <td>{{pedido.totalString}}</td>
+      <td><span class="badge badge-success" ng-show="pedido.entregue">{{pedido.status}}</span>
+          <span class="badge badge-secondary" ng-show="pedido.pronto">{{pedido.status}}</span>
+          <span class="badge badge-info" ng-show="pedido.realizado">{{pedido.status}}</span>
+          <input type="image" src="imagem/circle-check-2x.png" title="Pedido Pronto" ng-show="pedido.realizado" ng-click="pedidopronto(pedido.id)"></input>
+          <input type="image" src="imagem/thumb-up-2x.png" title="Pedido Entregue" ng-show="pedido.pronto" ng-click="pedidoentregue(pedido.id)"></input>
+          <input type="image" src="imagem/circle-x-2x.png" title="Cancelar Pedido" ng-click="pedidocancelado(pedido.id)"></input>
+      </td>
     </tr>
   </tbody>
 </table>
