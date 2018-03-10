@@ -4,7 +4,6 @@ angular.module("appPedido", []);
 
 angular.module("appPedido").controller("pedidocontroller", function ($scope, $http) { 
 
-	
 	$scope.showformnovopedido = false;
 	$scope.habilitarButtonnovopedido = false;
  	$scope.pedidoscarregados = false;
@@ -161,7 +160,6 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 
 
 });
-
 
 
 function onlynumbers(evt) {

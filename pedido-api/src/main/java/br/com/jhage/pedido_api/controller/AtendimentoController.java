@@ -37,6 +37,12 @@ public class AtendimentoController extends DefaultController{
 		return on.carregarPedidoDeHoje();
 	}
 	
+	@GetMapping(path= ValoresConstantes.REQUESTMAPPING_PEDIDOS_CANCELADOS)
+	public @ResponseBody Iterable<Pedido> carregarPedidosCancelados()  throws PedidoException{
+
+		return on.carregarPedidoCancelados();
+	}
+	
 	@PostMapping
 	@Transactional
 	public @ResponseBody Pedido registrarPedido(@RequestBody Pedido pedido) {

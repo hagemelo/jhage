@@ -23,4 +23,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 	@Query(ValoresConstantes.QUERY_CARREGAR_PEDIDOS_CANCELADOS)
 	public List<Pedido> carregarPedidoCancelados(@Param("hoje") String data);
 	
+	
+	@Query(value = ValoresConstantes.QUERY_TOTAL_PEDIDOS_DIA, nativeQuery = true)
+	public List<Object> vendasdia();
+	
+	
+	@Query(value = ValoresConstantes.QUERY_ITENS_PEDIDOS_DIA, nativeQuery = true)
+	public List<Object> itenspedidosdia(@Param("hoje") String data);
 }
