@@ -26,9 +26,9 @@ Erro ao Carregar Pedidos!
       <td><span class="badge badge-success" ng-show="pedido.entregue">{{pedido.status}}</span>
           <span class="badge badge-secondary" ng-show="pedido.pronto">{{pedido.status}}</span>
           <span class="badge badge-info" ng-show="pedido.realizado">{{pedido.status}}</span>
-          <input type="image" src="imagem/circle-check-2x.png" title="Pedido Pronto" ng-show="pedido.realizado" ng-click="pedidopronto(pedido.id)"></input>
-          <input type="image" src="imagem/thumb-up-2x.png" title="Pedido Entregue" ng-show="pedido.pronto" ng-click="pedidoentregue(pedido.id)"></input>
-          <input type="image" src="imagem/circle-x-2x.png" title="Cancelar Pedido" ng-click="pedidocancelado(pedido.id)"></input>
+          <input type="image" src="imagem/circle-check-2x.png" title="Pedido Pronto" ng-show="pedido.realizado" ng-click="pedidopronto(pedido.id)">
+          <input type="image" src="imagem/thumb-up-2x.png" title="Pedido Entregue" ng-show="pedido.pronto" ng-click="pedidoentregue(pedido.id)">
+          <input type="image" src="imagem/circle-x-2x.png" title="Cancelar Pedido" ng-click="pedidocancelado(pedido.id)">
       </td>
     </tr>
   </tbody>
