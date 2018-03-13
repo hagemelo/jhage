@@ -6,7 +6,7 @@
 	<groupId>br.com.jhage</groupId>
     <artifactId>pedido-api</artifactId>
     <name>pedido-api</name>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <packaging>jar</packaging>
     
 	<parent>

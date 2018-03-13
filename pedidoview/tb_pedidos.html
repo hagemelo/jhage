@@ -1,13 +1,12 @@
-
-<div class="alert alert-warning" role="alert" ng-show="!pedidoscarregados && !errobackendcarregarpedidos">
-  Não Há Pedidos! {{statusRetorno}}
+<div class="alert alert-warning" role="alert" ng-show="apresentarMsgNaoHaPedidos(dadosPedido)">
+  Nao Ha Pedidos.
 </div>
 
-<div class="alert alert-danger" role="alert"  ng-show="errobackendcarregarpedidos">
-Erro ao Carregar Pedidos!
+<div class="alert alert-danger" role="alert" ng-show="apresentarMsgErroCarregarPedidos(dadosPedido)">
+  Erro ao Carregar Pedidos.
 </div>
 
-<table class="table" ng-show="pedidoscarregados && !errobackendcarregarpedidos">
+<table class="table table-striped" ng-show="apresentarTabela(dadosPedido)">
   <thead class="thead-dark">
     <tr>
       <th>Contato</th>
@@ -18,17 +17,20 @@ Erro ao Carregar Pedidos!
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="pedido in pedidos">
+    <tr ng-repeat="pedido in dadosPedido.pedidos">
       <td>{{pedido.contato}}</td>
       <td>{{pedido.entrega}}</td>
       <td>{{pedido.trocoString}}</td>
       <td>{{pedido.totalString}}</td>
-      <td><span class="badge badge-success" ng-show="pedido.entregue">{{pedido.status}}</span>
+      <td>
+          <input type="image" src="imagem/eye-2x.png" title="Itens do Pedido" data-toggle="modal" data-target="#exampleModal" ng-click="carregarItensPedido(pedido.id)"/>
+          <span class="badge badge-success" ng-show="pedido.entregue">{{pedido.status}}</span>
           <span class="badge badge-secondary" ng-show="pedido.pronto">{{pedido.status}}</span>
           <span class="badge badge-info" ng-show="pedido.realizado">{{pedido.status}}</span>
-          <input type="image" src="imagem/circle-check-2x.png" title="Pedido Pronto" ng-show="pedido.realizado" ng-click="pedidopronto(pedido.id)">
-          <input type="image" src="imagem/thumb-up-2x.png" title="Pedido Entregue" ng-show="pedido.pronto" ng-click="pedidoentregue(pedido.id)">
-          <input type="image" src="imagem/circle-x-2x.png" title="Cancelar Pedido" ng-click="pedidocancelado(pedido.id)">
+          <input type="image" src="imagem/circle-check-2x.png" title="Pedido Pronto" ng-show="pedido.realizado" ng-click="pedidopronto(pedido)"/>
+          <input type="image" src="imagem/thumb-up-2x.png" title="Pedido Entregue" ng-show="pedido.pronto" ng-click="pedidoentregue(pedido)"/>
+          <input type="image" src="imagem/circle-x-2x.png" title="Cancelar Pedido" ng-click="pedidocancelado(pedido)"/>
+
       </td>
     </tr>
   </tbody>

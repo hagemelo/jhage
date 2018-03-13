@@ -4,56 +4,103 @@ angular.module("appPedido", []);
 
 angular.module("appPedido").controller("pedidocontroller", function ($scope, $http) { 
 
-	$scope.showformnovopedido = false;
-	$scope.habilitarButtonnovopedido = false;
- 	$scope.pedidoscarregados = false;
- 	$scope.errobackendcarregarpedidos = false;
-  	$scope.produtoSelecionado=[];
-  	$scope.itensselecionadas = [];
-  	$scope.totalPedido = 'R$ 0,00';
+	
+	const dadosPedido = {
+
+		showformnovopedido 			: false,
+		desabilitarButtonnovopedido : false,
+	 	pedidoscarregados 			: false,
+	 	errobackendcarregarpedidos 	: false,
+	 	showrespostadeacao			: false,
+	 	mensagemrespostadeacao		: false,
+	  	pedidos 					: [],
+	  	statusRetorno  				: "",
+	  	desahabilitarButtonnovopedido : false,
+	  	totalPedido 		: "R$ 0,00",
+	  	itenspedido			: [],
+	  	produtos 			: [],
+	  	produtoSelecionado 	: [],
+	  	quantidade 			: 1,
+	  	novoPedido 			: {
+	  		contato				: "",
+			entrega 			: "",
+			troco   			: 0,
+	  		itens 				: []
+	  	}	  	
+	};
+
+	prepararNovoPedido = function(){
+
+		dadosPedido.showformnovopedido 				= true;
+		dadosPedido.desahabilitarButtonnovopedido 	= true;
+		dadosPedido.contato 						= "";
+		dadosPedido.entrega 						= "";
+		dadosPedido.troco   						= 0;
+		dadosPedido.quantidade 						= 1;
+		dadosPedido.produtoSelecionado 				= [];
+	  	dadosPedido.itens 							= [];
+	  	dadosPedido.produtos 						= [];
+	  	dadosPedido.totalPedido 					= "R$ 0,00";
+	};
+
+	limparNovoPedido = function(){
+
+		dadosPedido.contato 			= "";
+		dadosPedido.entrega 			= "";
+		dadosPedido.troco   			= 0;
+		dadosPedido.quantidade 			= 1;
+		dadosPedido.produtoSelecionado 	= [];
+	  	dadosPedido.itens       		= [];
+	  	dadosPedido.totalPedido 		= "R$ 0,00";
+	};
 
 
+	retornarconfigpadrao = function() {
+
+		dadosPedido.showformnovopedido 			= false;
+		dadosPedido.desabilitarButtonnovopedido = false;
+	 	dadosPedido.errobackendcarregarpedidos 	= false;
+	   	dadosPedido.statusRetorno  				= "";
+	  	dadosPedido.desahabilitarButtonnovopedido	= false;
+	};
+
+
+	showretornoacao = function(mensagem) {
+
+		dadosPedido.showrespostadeacao = true;
+		dadosPedido.mensagemrespostadeacao = mensagem;
+	};
+
+	
 	var carregarPedidos = function(){
 
 		$http.get("http://localhost:8080/atendimento/pedidosdodia").then(function (response) {
 
-		    var data = response.data;
-		    var status = response.status;
-		    var statusText = response.statusText;
-		    var headers = response.headers;
-		    var config = response.config;
-		    $scope.pedidos = data;
-		    $scope.pedidoscarregados = true;
+		   	dadosPedido.pedidos = response.data;
+		    dadosPedido.pedidoscarregados = true;
 		}, function myError(response) {
 
 			var status = response.status;
 			if (status != 200){
-				$scope.errobackendcarregarpedidos = true;
+				dadosPedido.errobackendcarregarpedidos = true;
 			}
-
-			$scope.statusRetorno = response.statusText;
- 			$scope.pedidoscarregados = false;
-
+			dadosPedido.statusRetorno = response.statusText;
+ 			dadosPedido.pedidoscarregados = false;
 		}
 		);
 	};
 	
 	carregarPedidos();
-
-	$scope.novopedido = function(){
-
-
-		$scope.itenspedido = [];
-		$scope.qtd = 1;
-		
-		$scope.showformnovopedido = true;
-		$scope.habilitarButtonnovopedido = true;
+	limparNovoPedido();
+	$scope.dadosPedido = dadosPedido;
+	
+	$scope.criarNovoPedido  = function(){
 
 		$http.get("http://localhost:8080/cadastro/produto/all").then(function (response) {
 
-		   $scope.produtos =  response.data;
+		   dadosPedido.produtos =  response.data;
 		});
-
+		prepararNovoPedido();
 	};
 
 
@@ -62,103 +109,113 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		 if (qtd == null){
 		 	qtd = 1;
 		 }
-		 $scope.itensselecionadas.push({
+		 dadosPedido.novoPedido.itens.push({
 		 	quantidade: qtd,
             valor: produtosel.valor,
             descricao : produtosel.descricao,
             total : qtd * produtosel.valor
 		 });
 
-		 calcularTotalpedido();
+		dadosPedido.totalPedido = calcularTotalpedido(dadosPedido);
+		$scope.dadosPedido = dadosPedido;
+		
 	};
 
 	calcularTotalpedido = function(){
 
-		$scope.totalPedido = 'R$ 0,00';
+		dadosPedido.totalPedido = 'R$ 0,00';
 		var valor = 0;
-		for (i in $scope.itensselecionadas){
-			valor = valor + ($scope.itensselecionadas[i].quantidade *  $scope.itensselecionadas[i].valor);
-			$scope.totalPedido = 'R$ ' + valor;
+		for (i in dadosPedido.novoPedido.itens){
+			valor = valor + (dadosPedido.novoPedido.itens[i].quantidade *  dadosPedido.novoPedido.itens[i].valor);
+			dadosPedido.totalPedido = 'R$ ' + valor;
 		};
+		return dadosPedido.totalPedido;
 	};
 
 
-	$scope.addpedido = function(pedido, itensselecionadas){
+	$scope.addpedido = function(novoPedido){
 
-		pedido.itens = itensselecionadas;
+		
+		$http.post("http://localhost:8080/atendimento", novoPedido).then(function (response) {
+						
 
-
-		$http.post("http://localhost:8080/atendimento", pedido).then(function (response) {
-
+			var mensagem = "Pedido (" + novoPedido.contato + " - " +  novoPedido.entrega + ") Salvo!";
+			limparNovoPedido();
+			retornarconfigpadrao();
 			carregarPedidos();
-			$scope.showformnovopedido = false;
-			$scope.habilitarButtonnovopedido = false;
-		 	$scope.pedidoscarregados = false;
-		 	$scope.errobackendcarregarpedidos = false;
-		  	$scope.produtoSelecionado=[];
-		  	$scope.itensselecionadas = [];
-		  	$scope.totalPedido = 'R$ 0,00';
-		  	delete 	$scope.pedido;  
-		  	delete  $scope.itensselecionadas;
+			showretornoacao(mensagem);
 		});
 
 	};
 
 
-	$scope.pedidopronto = function(idpedido){
+	$scope.pedidopronto = function(pedido){
 
-		$http.post("http://localhost:8080/atendimento/pedidopronto/" + idpedido).then(function (response) {
+		$http.post("http://localhost:8080/atendimento/pedidopronto/" + pedido.id).then(function (response) {
+			
+			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ") Pronto!";
+			limparNovoPedido();
+			retornarconfigpadrao();
 			carregarPedidos();
-			$scope.showformnovopedido = false;
-			$scope.habilitarButtonnovopedido = false;
-		 	$scope.pedidoscarregados = false;
-		 	$scope.errobackendcarregarpedidos = false;
-		  	$scope.produtoSelecionado=[];
-		  	$scope.itensselecionadas = [];
-		  	$scope.totalPedido = 'R$ 0,00';
-		  	delete 	$scope.pedido;  
-		  	delete  $scope.itensselecionadas;
+			showretornoacao(mensagem);
 		});
 
 	};
 
 
-	$scope.pedidoentregue = function(idpedido){
+	$scope.carregarItensPedido  = function(idpedido){
 
-		$http.post("http://localhost:8080/atendimento/pedidoentregue/" + idpedido).then(function (response) {
+		$http.get("http://localhost:8080/atendimento/itensdopedido/" + idpedido).then(function (response) {
+
+		  $scope.itensdopedido =  response.data;
+		});
+	};
+
+
+	$scope.pedidoentregue = function(pedido){
+
+		$http.post("http://localhost:8080/atendimento/pedidoentregue/" + pedido.id).then(function (response) {
+			
+			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ") Entregue!";
+			limparNovoPedido();
+			retornarconfigpadrao();
 			carregarPedidos();
-			$scope.showformnovopedido = false;
-			$scope.habilitarButtonnovopedido = false;
-		 	$scope.pedidoscarregados = false;
-		 	$scope.errobackendcarregarpedidos = false;
-		  	$scope.produtoSelecionado=[];
-		  	$scope.itensselecionadas = [];
-		  	$scope.totalPedido = 'R$ 0,00';
-		  	delete 	$scope.pedido;  
-		  	delete  $scope.itensselecionadas;
+			showretornoacao(mensagem);
 		});
 
 	};
 
 
-	$scope.pedidocancelado = function(idpedido){
+	$scope.pedidocancelado = function(pedido){
 
-		$http.post("http://localhost:8080/atendimento/pedidocancelado/" + idpedido).then(function (response) {
+		$http.post("http://localhost:8080/atendimento/pedidocancelado/" + pedido.id).then(function (response) {
+			
+			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ") Cancelado!";
+			limparNovoPedido();
+			retornarconfigpadrao();
 			carregarPedidos();
-			$scope.showformnovopedido = false;
-			$scope.habilitarButtonnovopedido = false;
-		 	$scope.pedidoscarregados = false;
-		 	$scope.errobackendcarregarpedidos = false;
-		  	$scope.produtoSelecionado=[];
-		  	$scope.itensselecionadas = [];
-		  	$scope.totalPedido = 'R$ 0,00';
-		  	delete 	$scope.pedido;  
-		  	delete  $scope.itensselecionadas;
+			showretornoacao(mensagem);
 		});
 
 	};
 
 
+	$scope.apresentarTabela = function(){
+
+		return dadosPedido.pedidoscarregados && !dadosPedido.errobackendcarregarpedidos;
+	};
+
+	$scope.apresentarMsgNaoHaPedidos = function(){
+
+		return !dadosPedido.pedidoscarregados && dadosPedido.errobackendcarregarpedidos;
+	};
+
+	$scope.apresentarMsgErroCarregarPedidos = function(){
+
+		return dadosPedido.errobackendcarregarpedidos;
+	};
+
+	
 });
 
 
