@@ -1,7 +1,12 @@
 package br.com.jhage.pedido_api.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.modelo.HistoricoPedido;
 
 /**
@@ -12,5 +17,6 @@ import br.com.jhage.pedido_api.modelo.HistoricoPedido;
  */
 public interface HistoricoPedidoRepository extends JpaRepository<HistoricoPedido, Long>{
 	
-	
+	@Query(ValoresConstantes.QUERY_HISTORICO_DO_PEDIDO)
+	public List<HistoricoPedido> historicoDoPedido(@Param("id") Long idpedido);
 }

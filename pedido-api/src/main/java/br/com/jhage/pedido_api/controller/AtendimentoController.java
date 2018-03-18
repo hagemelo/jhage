@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jhage.pedido_api.constante.StatusPedido;
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.excecao.PedidoException;
 import br.com.jhage.pedido_api.modelo.ItemPedido;
@@ -47,7 +48,7 @@ public class AtendimentoController extends DefaultController{
 	@Transactional
 	public @ResponseBody Pedido registrarPedido(@RequestBody Pedido pedido) {
 
-		return on.registrarPedido(pedido);
+		return on.salvar(pedido);
 	}
 	
 	@GetMapping(path= ValoresConstantes.REQUESTMAPPING_ITENS_DO_PEDIDO)
@@ -60,21 +61,21 @@ public class AtendimentoController extends DefaultController{
 	@Transactional
 	public @ResponseBody Pedido pedidoPronto(@PathVariable("id") Long idPedido) throws PedidoException{
 
-		return on.pedidoPronto(idPedido);
+		return on.salvar(idPedido, StatusPedido.PRONTO);
 	}
 	
 	@PostMapping(path= ValoresConstantes.REQUESTMAPPING_PEDIDO_ENTREGUE)
 	@Transactional
 	public @ResponseBody Pedido pedidoEntregue(@PathVariable("id") Long idPedido) throws PedidoException{
 
-		return on.pedidoEntregue(idPedido);
+		return on.salvar(idPedido, StatusPedido.ENTREGUE);
 	}
 	
 	@PostMapping(path= ValoresConstantes.REQUESTMAPPING_PEDIDO_CANCELADO)
 	@Transactional
 	public @ResponseBody Pedido pedidoCancelado(@PathVariable("id") Long idPedido) throws PedidoException{
 
-		return on.pedidoCancelado(idPedido);
+		return on.salvar(idPedido, StatusPedido.CANCELADO);
 	}
 	
 }

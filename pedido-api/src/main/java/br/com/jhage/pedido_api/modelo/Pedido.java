@@ -132,24 +132,9 @@ public class Pedido implements JhageEntidade{
 		return StatusPedido.ENTREGUE.equals(this.status);
 	}
 	
-	public void pronto(){
+	public void setStatus(StatusPedido status){
 		
-		this.status = StatusPedido.PRONTO;
-	}
-	
-	public void realizado(){
-		
-		this.status = StatusPedido.REALIZADO;
-	}
-	
-	public void entregue(){
-		
-		this.status = StatusPedido.ENTREGUE;
-	}
-
-	public void cancelado(){
-		
-		this.status = StatusPedido.CANCELADO;
+		this.status = status;
 	}
 	
 	public String getContato() {
@@ -239,7 +224,7 @@ public class Pedido implements JhageEntidade{
 		
 		if (Helper.ENULO.enulo(this.status)){
 			
-			this.realizado();
+			this.status = StatusPedido.REALIZADO;
 		}
 	}
 

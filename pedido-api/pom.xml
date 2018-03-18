@@ -108,13 +108,13 @@
 		    <artifactId>mail</artifactId>
 		    <version>1.4.7</version>
 		</dependency>
-		
+		<!-- Banco de Desenvolvimento -->
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.4.1211</version>
 		</dependency>
-		
+		<!-- Banco de Teste -->
 		<dependency>
 		    <groupId>org.hsqldb</groupId>
 		    <artifactId>hsqldb</artifactId>

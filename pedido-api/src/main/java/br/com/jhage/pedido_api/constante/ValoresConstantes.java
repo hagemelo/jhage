@@ -38,19 +38,24 @@ public class ValoresConstantes {
 															  + "from Pedido p "
 															  + "where to_char(p.cadastro, 'dd/MM/yyyy') = :hoje "
 															  + "and not p.status like 'CANCELADO' "
-															  + "order by p.cadastro";
+															  + "order by p.cadastro desc";
 	
 	
 	public static final String QUERY_CARREGAR_PEDIDOS_CANCELADOS = "select p "
 																  + "from Pedido p "
 																  + "where to_char(p.cadastro, 'dd/MM/yyyy') = :hoje "
 																  + "and p.status like 'CANCELADO'"
-																  + " order by p.cadastro";
+																  + " order by p.cadastro desc";
 	
 	
 	public static final String QUERY_CARREGAR_ITENS_DO_PEDIDO = "select i "
 															  + "from ItemPedido i join i.pedido p "
 															  + "where p.id =:idPedido";
+	
+	
+	public static final String QUERY_HISTORICO_DO_PEDIDO = "select h "
+														 + "from HistoricoPedido h join h.pedido p "
+														 + "where p.id =:id";
 	
 	
 	public static final String QUERY_TOTAL_PEDIDOS_DIA ="Select "+
@@ -66,25 +71,23 @@ public class ValoresConstantes {
 															"order by 1 desc";
 	
 	public static final String QUERY_ITENS_PEDIDOS_DIA ="Select " + 
-			"	i.descricao item, " + 
-			"	count(p.pedido_id) quantidade, " + 
-			"	round(cast(count(i.itempedido_id)as decimal)/cast(max(tudo.qtdtotal)as decimal),2)  Percentual, " + 
-			"	round(cast(sum(i.quantidade * i.valor) as decimal)) total " + 
-			
-			"from  " + 
-			"	Pedido p  " + 
-			"	join item_pedido i on (i.pedido_pedido_id = p.pedido_id) " + 
-			"	join (Select to_char(pp.cadastro, 'dd/MM/yyyy') datas,  " + 
-			"	count(ii.itempedido_id) qtdtotal " + 
-			"from  " + 
-			"	Pedido pp  " + 
-			"	join item_pedido ii on (ii.pedido_pedido_id = pp.pedido_id)  " + 
-			"where  " + 
-			"	not pp.status like 'CANCELADO' group by 1) as tudo on (tudo.datas = to_char(p.cadastro, 'dd/MM/yyyy')) " + 
-		
-			"where  " + 
-			"	to_char(p.cadastro, 'dd-MM-yyyy') = :hoje " + 
-			"	and not p.status like 'CANCELADO' " + 
-			"group by i.descricao";
+														"	i.descricao item, " + 
+														"	count(p.pedido_id) quantidade, " + 
+														"	round(cast(count(i.itempedido_id)as decimal)/cast(max(tudo.qtdtotal)as decimal),2)  Percentual, " + 
+														"	round(cast(sum(i.quantidade * i.valor) as decimal)) total " + 
+														"from  " + 
+														"	Pedido p  " + 
+														"	join item_pedido i on (i.pedido_pedido_id = p.pedido_id) " + 
+														"	join (Select to_char(pp.cadastro, 'dd/MM/yyyy') datas,  " + 
+														"				 count(ii.itempedido_id) qtdtotal " + 
+																 "from Pedido pp  " + 
+																 	  "join item_pedido ii on (ii.pedido_pedido_id = pp.pedido_id)  " + 
+																 "where  " + 
+																 "not pp.status like 'CANCELADO' group by 1) as tudo on (tudo.datas = to_char(p.cadastro, 'dd/MM/yyyy')) " + 
+													
+														"where  " + 
+														"	to_char(p.cadastro, 'dd-MM-yyyy') = :hoje " + 
+														"	and not p.status like 'CANCELADO' " + 
+														"group by i.descricao";
 	
 }

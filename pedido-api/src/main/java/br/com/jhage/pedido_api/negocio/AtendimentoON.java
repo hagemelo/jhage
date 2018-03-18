@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.jhage.pedido_api.constante.StatusPedido;
 import br.com.jhage.pedido_api.excecao.PedidoException;
 import br.com.jhage.pedido_api.helper.FormatDateHelper;
 import br.com.jhage.pedido_api.modelo.HistoricoPedido;
@@ -34,12 +35,7 @@ public class AtendimentoON {
 	@Autowired
 	private HistoricoPedidoRepository historicorepository;
 	
-	public Pedido registrarPedido(Pedido pedido) {
-		
-		Pedido result =  repository.save(pedido);
-		registrarHistorico(result);
-		return result;
-	}
+	private Pedido pedido;
 	
 	public Iterable<ItemPedido> carregarItensDoPedido(Long idPedido)  throws PedidoException{
 		
@@ -64,36 +60,36 @@ public class AtendimentoON {
 		return result;
 	}
 	
-	public Pedido pedidoPronto(long idpedido) throws PedidoException{
+	public Pedido salvar(Pedido pedido) {
 		
-		Pedido result = repository.findOne(idpedido);
-		result.pronto();
-		result = repository.save(result);
-		registrarHistorico(result);
-		return result;
+		this.pedido = pedido;
+		savarPedido();
+		registrarHistorico();
+		return this.pedido;
 	}
 	
-	public Pedido pedidoEntregue(long idpedido) throws PedidoException{
+	public Pedido salvar(long idpedido, StatusPedido status) throws PedidoException{
 		
-		Pedido result = repository.findOne(idpedido);
-		result.entregue();
-		result = repository.save(result);
-		registrarHistorico(result);
-		return result;
+		carregarPedidoPorId(idpedido);
+		this.pedido.setStatus(status);
+		savarPedido();
+		registrarHistorico();
+		return this.pedido;
 	}
 	
-	public Pedido pedidoCancelado(long idpedido) throws PedidoException{
+	private void carregarPedidoPorId(long idpedido) {
 		
-		Pedido result = repository.findOne(idpedido);
-		result.cancelado();
-		result = repository.save(result);
-		registrarHistorico(result);
-		return result;
+		this.pedido = repository.findOne(idpedido);
 	}
 	
-	private void registrarHistorico(Pedido pedido) {
+	private void savarPedido() {
 		
-		HistoricoPedido hp = new HistoricoPedido(pedido);
+		this.pedido = repository.save(this.pedido);
+	}
+	
+	private void registrarHistorico() {
+		
+		HistoricoPedido hp = new HistoricoPedido(this.pedido);
 		historicorepository.save(hp);
 	}
 
