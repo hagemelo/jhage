@@ -1,4 +1,4 @@
-angular.module("appPedido", []);
+angular.module("appPedido",[]);
 
 
 
@@ -6,74 +6,66 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 
 	
 	const dadosPedido = {
-
-		showformnovopedido 			: false,
+		showformnovopedido : false,
 		desabilitarButtonnovopedido : false,
-	 	pedidoscarregados 			: false,
-	 	errobackendcarregarpedidos 	: false,
-	 	showrespostadeacao			: false,
-	 	mensagemrespostadeacao		: false,
-	  	pedidos 					: [],
-	  	statusRetorno  				: "",
+	 	pedidoscarregados : false,
+	 	errobackendcarregarpedidos : false,
+	 	showrespostadeacao : false,
+	 	mensagemrespostadeacao : false,
+	  	pedidos : [],
+	  	statusRetorno : "",
 	  	desahabilitarButtonnovopedido : false,
-	  	totalPedido 		: "R$ 0,00",
-	  	itenspedido			: [],
-	  	produtos 			: [],
-	  	produtoSelecionado 	: [],
-	  	quantidade 			: 1,
-	  	novoPedido 			: {
-	  		contato				: "",
-			entrega 			: "",
-			troco   			: 0,
-	  		itens 				: []
+	  	totalPedido : "R$ 0,00",
+	  	itenspedido : [],
+	  	produtos :[],
+	  	produtoSelecionado : [],
+	  	quantidade : 1,
+	  	novoPedido : {
+	  		contato : "",
+			entrega : "",
+			troco : 0,
+	  		itens :[]
 	  	}	  	
 	};
 
 	prepararNovoPedido = function(){
-
-		dadosPedido.showformnovopedido 				= true;
-		dadosPedido.desahabilitarButtonnovopedido 	= true;
-		dadosPedido.contato 						= "";
-		dadosPedido.entrega 						= "";
-		dadosPedido.troco   						= 0;
-		dadosPedido.quantidade 						= 1;
-		dadosPedido.produtoSelecionado 				= [];
-	  	dadosPedido.itens 							= [];
-	  	dadosPedido.produtos 						= [];
-	  	dadosPedido.totalPedido 					= "R$ 0,00";
+		dadosPedido.showformnovopedido = true;
+		dadosPedido.desahabilitarButtonnovopedido = true;
+		dadosPedido.contato = "";
+		dadosPedido.entrega = "";
+		dadosPedido.troco = 0;
+		dadosPedido.quantidade = 1;
+		dadosPedido.produtoSelecionado =[];
+	  	dadosPedido.itens = [];
+	  	dadosPedido.produtos = [];
+	  	dadosPedido.totalPedido = "R$ 0,00";
 	};
 
 	limparNovoPedido = function(){
-
-		dadosPedido.contato 			= "";
-		dadosPedido.entrega 			= "";
-		dadosPedido.troco   			= 0;
-		dadosPedido.quantidade 			= 1;
-		dadosPedido.produtoSelecionado 	= [];
-	  	dadosPedido.itens       		= [];
-	  	dadosPedido.totalPedido 		= "R$ 0,00";
+		dadosPedido.contato = "";
+		dadosPedido.entrega = "";
+		dadosPedido.troco = 0;
+		dadosPedido.quantidade = 1;
+		dadosPedido.produtoSelecionado = [];
+	  	dadosPedido.itens = [];
+	  	dadosPedido.totalPedido = "R$ 0,00";
 	};
 
 
 	retornarconfigpadrao = function() {
-
-		dadosPedido.showformnovopedido 			= false;
+		dadosPedido.showformnovopedido = false;
 		dadosPedido.desabilitarButtonnovopedido = false;
-	 	dadosPedido.errobackendcarregarpedidos 	= false;
-	   	dadosPedido.statusRetorno  				= "";
-	  	dadosPedido.desahabilitarButtonnovopedido	= false;
+	 	dadosPedido.errobackendcarregarpedidos = false;
+	   	dadosPedido.statusRetorno = "";
+	  	dadosPedido.desahabilitarButtonnovopedido = false;
 	};
 
-
 	showretornoacao = function(mensagem) {
-
 		dadosPedido.showrespostadeacao = true;
 		dadosPedido.mensagemrespostadeacao = mensagem;
 	};
 
-	
 	var carregarPedidos = function(){
-
 		$http.get("http://localhost:8080/atendimento/pedidosdodia").then(function (response) {
 
 		   	dadosPedido.pedidos = response.data;
@@ -89,7 +81,8 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		}
 		);
 	};
-	
+
+
 	carregarPedidos();
 	limparNovoPedido();
 	$scope.dadosPedido = dadosPedido;
@@ -153,7 +146,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 
 		$http.post("http://localhost:8080/atendimento/pedidopronto/" + pedido.id).then(function (response) {
 			
-			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ") Pronto!";
+			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ")  Pronto!";
 			limparNovoPedido();
 			retornarconfigpadrao();
 			carregarPedidos();
@@ -215,7 +208,10 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		return dadosPedido.errobackendcarregarpedidos;
 	};
 
-	
+	$scope.fecharMsgRespostaAcao = function(){
+
+		return dadosPedido.showrespostadeacao = false;
+	};	
 });
 
 
@@ -229,8 +225,9 @@ function onlynumbers(evt) {
 		if (k != 46 && k != 9 && k != 8 && k != 13 && k != 36 && k != 35
 				&& k != 37 && k != 38 && k != 39 && k != 40) {
 			theEvent.returnValue = false;
-			if (theEvent.preventDefault)
+			if (theEvent.preventDefault){
 				theEvent.preventDefault();
+			}
 		}
 	}
 }
@@ -243,11 +240,12 @@ function onlydecimal(evt) {
 	var regex = /\d/;
 	if (!regex.test(key)) {
 		if (k != 46 && k != 9 && k != 8 && k != 13 && k != 36 && k != 35
-				&& k != 37 && k != 38 && k != 39 && k != 40 && key != ','
+				&& k != 37 && k != 38 && k != 39 && k != 40 && key != ","
 				&& key != '.' && key != '-') {
 			theEvent.returnValue = false;
-			if (theEvent.preventDefault)
+			if (theEvent.preventDefault){
 				theEvent.preventDefault();
+			}
 		}
 	}
 }
