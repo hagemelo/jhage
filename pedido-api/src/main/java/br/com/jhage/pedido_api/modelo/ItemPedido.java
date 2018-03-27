@@ -113,8 +113,8 @@ private static final long serialVersionUID = 1L;
 	private boolean isOKQuantidadeValor(){
 		
 		return !Helper.ENULO.enulo(this.valor) 
-				& !Helper.ENULO.enulo(this.quantidade) 
-				& Double.doubleToRawLongBits(this.valor)!=ValoresConstantes.ZERO;
+				&& !Helper.ENULO.enulo(this.quantidade) 
+				&& Double.doubleToRawLongBits(this.valor)!=ValoresConstantes.ZERO;
 	}
 	
 	@Override

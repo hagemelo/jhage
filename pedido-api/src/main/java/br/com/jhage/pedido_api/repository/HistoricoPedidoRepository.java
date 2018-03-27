@@ -19,4 +19,7 @@ public interface HistoricoPedidoRepository extends JpaRepository<HistoricoPedido
 	
 	@Query(ValoresConstantes.QUERY_HISTORICO_DO_PEDIDO)
 	public List<HistoricoPedido> historicoDoPedido(@Param("id") Long idpedido);
+	
+	@Query(value = ValoresConstantes.QUERY_TEMPO_PEDIDO, nativeQuery = true)
+	public  List<Object> tempoPedido();
 }

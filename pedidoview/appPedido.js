@@ -16,6 +16,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	  	statusRetorno : "",
 	  	desahabilitarButtonnovopedido : false,
 	  	totalPedido : "R$ 0,00",
+	  	trocoPedido : "R$ 0,00",
 	  	itenspedido : [],
 	  	produtos :[],
 	  	produtoSelecionado : [],
@@ -24,6 +25,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	  		contato : "",
 			entrega : "",
 			troco : 0,
+			total : 0,
 	  		itens :[]
 	  	}	  	
 	};
@@ -31,24 +33,27 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	prepararNovoPedido = function(){
 		dadosPedido.showformnovopedido = true;
 		dadosPedido.desahabilitarButtonnovopedido = true;
-		dadosPedido.contato = "";
-		dadosPedido.entrega = "";
-		dadosPedido.troco = 0;
-		dadosPedido.quantidade = 1;
+		dadosPedido.novoPedido.contato = "";
+		dadosPedido.novoPedido.entrega = "";
+		dadosPedido.novoPedido.troco = 0;
+		dadosPedido.novoPedido.quantidade = 1;
 		dadosPedido.produtoSelecionado =[];
-	  	dadosPedido.itens = [];
+	  	dadosPedido.novoPedido.itens = [];
 	  	dadosPedido.produtos = [];
 	  	dadosPedido.totalPedido = "R$ 0,00";
+	  	
 	};
 
 	limparNovoPedido = function(){
-		dadosPedido.contato = "";
-		dadosPedido.entrega = "";
-		dadosPedido.troco = 0;
-		dadosPedido.quantidade = 1;
+		dadosPedido.novoPedido.contato = "";
+		dadosPedido.novoPedido.entrega = "";
+		dadosPedido.novoPedido.troco = 0;
+		dadosPedido.novoPedido.total = 0;
+		dadosPedido.novoPedido.quantidade = 1;
 		dadosPedido.produtoSelecionado = [];
-	  	dadosPedido.itens = [];
+	  	dadosPedido.novoPedido.itens = [];
 	  	dadosPedido.totalPedido = "R$ 0,00";
+	  	dadosPedido.trocoPedido = "R$ 0,00";
 	};
 
 
@@ -63,10 +68,12 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	showretornoacao = function(mensagem) {
 		dadosPedido.showrespostadeacao = true;
 		dadosPedido.mensagemrespostadeacao = mensagem;
+		$scope.dadosPedido = dadosPedido;
 	};
 
 	var carregarPedidos = function(){
-		$http.get("http://localhost:8080/atendimento/pedidosdodia").then(function (response) {
+		$http.get("http://localhost:8080/atendimento/pedidosdodia")
+		.then(function (response) {
 
 		   	dadosPedido.pedidos = response.data;
 		    dadosPedido.pedidoscarregados = true;
@@ -89,7 +96,9 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	
 	$scope.criarNovoPedido  = function(){
 
-		$http.get("http://localhost:8080/cadastro/produto/all").then(function (response) {
+		$http.get("http://localhost:8080/cadastro/produto/all")
+
+		.then(function (response) {
 
 		   dadosPedido.produtos =  response.data;
 		});
@@ -114,29 +123,55 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		
 	};
 
+	$scope.removeritem = function(item){
+
+
+		dadosPedido.novoPedido.itens.splice(dadosPedido.novoPedido.itens.indexOf(item),1);
+		dadosPedido.totalPedido = calcularTotalpedido(dadosPedido);
+		$scope.dadosPedido = dadosPedido;
+	};
+
+
 	calcularTotalpedido = function(){
 
 		dadosPedido.totalPedido = 'R$ 0,00';
 		var valor = 0;
+		var troco = 0;
 		for (i in dadosPedido.novoPedido.itens){
 			valor = valor + (dadosPedido.novoPedido.itens[i].quantidade *  dadosPedido.novoPedido.itens[i].valor);
 			dadosPedido.totalPedido = 'R$ ' + valor;
+			dadosPedido.novoPedido.total = valor;
+			if (dadosPedido.novoPedido.troco > 0 ){
+				troco = dadosPedido.novoPedido.troco - valor;
+				dadosPedido.trocoPedido = 'R$ ' + troco;
+			}
 		};
 		return dadosPedido.totalPedido;
 	};
 
 
+
+
+
 	$scope.addpedido = function(novoPedido){
+
+		var troco = 0;
+		if (novoPedido.troco > 0 ){
+			troco = novoPedido.troco - novoPedido.total;
+			novoPedido.troco =  troco;
+		}
 
 		
 		$http.post("http://localhost:8080/atendimento", novoPedido).then(function (response) {
 						
 
 			var mensagem = "Pedido (" + novoPedido.contato + " - " +  novoPedido.entrega + ") Salvo!";
-			limparNovoPedido();
+			
 			retornarconfigpadrao();
 			carregarPedidos();
+			limparNovoPedido();
 			showretornoacao(mensagem);
+			
 		});
 
 	};
@@ -151,6 +186,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 			retornarconfigpadrao();
 			carregarPedidos();
 			showretornoacao(mensagem);
+			
 		});
 
 	};
@@ -161,6 +197,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		$http.get("http://localhost:8080/atendimento/itensdopedido/" + idpedido).then(function (response) {
 
 		  $scope.itensdopedido =  response.data;
+
 		});
 	};
 
@@ -174,6 +211,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 			retornarconfigpadrao();
 			carregarPedidos();
 			showretornoacao(mensagem);
+			
 		});
 
 	};
@@ -181,13 +219,16 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 
 	$scope.pedidocancelado = function(pedido){
 
-		$http.post("http://localhost:8080/atendimento/pedidocancelado/" + pedido.id).then(function (response) {
+		$http.delete("http://localhost:8080/atendimento/pedidocancelado/" + pedido.id)
+
+		.then(function (response) {
 			
 			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ") Cancelado!";
 			limparNovoPedido();
 			retornarconfigpadrao();
 			carregarPedidos();
 			showretornoacao(mensagem);
+
 		});
 
 	};

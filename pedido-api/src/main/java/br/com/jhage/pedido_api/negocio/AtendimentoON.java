@@ -46,7 +46,7 @@ public class AtendimentoON {
 		
 		List<Pedido> result = null;
 		String hoje;
-		hoje = FormatDateHelper.converterDataParaCaracter(new Date());
+		hoje = FormatDateHelper.getInstance().converterDataParaCaracter(new Date());
 		result = repository.carregarPedidoPorData(hoje);
 		return result;
 	}
@@ -55,7 +55,7 @@ public class AtendimentoON {
 		
 		List<Pedido> result = null;
 		String hoje;
-		hoje = FormatDateHelper.converterDataParaCaracter(new Date());
+		hoje = FormatDateHelper.getInstance().converterDataParaCaracter(new Date());
 		result = repository.carregarPedidoCancelados(hoje);
 		return result;
 	}
@@ -63,6 +63,7 @@ public class AtendimentoON {
 	public Pedido salvar(Pedido pedido) {
 		
 		this.pedido = pedido;
+		
 		savarPedido();
 		registrarHistorico();
 		return this.pedido;

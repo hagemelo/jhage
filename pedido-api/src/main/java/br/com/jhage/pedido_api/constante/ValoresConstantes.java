@@ -30,6 +30,7 @@ public class ValoresConstantes {
 	public static final String REQUESTMAPPING_PEDIDO_CANCELADO = "/pedidocancelado/{id}";
 	public static final String REQUESTMAPPING_VENDAS_DIA = "/vendasdia";
 	public static final String REQUESTMAPPING_ITENS_PEDIDO_DIA = "/itenspedidodia/{datapedido}";
+	public static final String REQUESTMAPPING_TEMPO_PEDIDO = "/tempopedido";
 	/**
 	 * QUERIES
 	 */
@@ -62,11 +63,9 @@ public class ValoresConstantes {
 															"to_char(p.cadastro, 'dd/MM/yyyy') dia, "+
 															"count(p.pedido_id) quantidade, "+
 															"round(cast(sum(i.quantidade * i.valor) as decimal)) total "+
-															"from "+
-																"Pedido p "+
+															"from Pedido p "+
 																"join item_pedido i on (i.pedido_pedido_id = p.pedido_id) "+
-															"where "+
-																"not p.status like 'CANCELADO' "+
+															"where not p.status like 'CANCELADO' "+
 															"group by 1 " +
 															"order by 1 desc";
 	
@@ -75,8 +74,7 @@ public class ValoresConstantes {
 														"	count(p.pedido_id) quantidade, " + 
 														"	round(cast(count(i.itempedido_id)as decimal)/cast(max(tudo.qtdtotal)as decimal),2)  Percentual, " + 
 														"	round(cast(sum(i.quantidade * i.valor) as decimal)) total " + 
-														"from  " + 
-														"	Pedido p  " + 
+														"from Pedido p  " + 
 														"	join item_pedido i on (i.pedido_pedido_id = p.pedido_id) " + 
 														"	join (Select to_char(pp.cadastro, 'dd/MM/yyyy') datas,  " + 
 														"				 count(ii.itempedido_id) qtdtotal " + 
@@ -85,9 +83,32 @@ public class ValoresConstantes {
 																 "where  " + 
 																 "not pp.status like 'CANCELADO' group by 1) as tudo on (tudo.datas = to_char(p.cadastro, 'dd/MM/yyyy')) " + 
 													
-														"where  " + 
-														"	to_char(p.cadastro, 'dd-MM-yyyy') = :hoje " + 
+														"where to_char(p.cadastro, 'dd-MM-yyyy') = :hoje " + 
 														"	and not p.status like 'CANCELADO' " + 
 														"group by i.descricao";
+	
+	public static final String QUERY_TEMPO_PEDIDO = "SELECT a.tipo, avg(a.tempodecorrido) media, max(a.tempodecorrido) maximo, min(a.tempodecorrido) minimo " + 
+			"from (SELECT " + 
+			"	h.pedido_id, " + 
+			"	'Tempo p Ficar Pronto' tipo, " + 
+			"	max(case when h.status = 'PRONTO' then h.ocorrencia end ) - " + 
+			"	max(case when h.status = 'REALIZADO' then h.ocorrencia end) tempodecorrido " + 
+			"FROM public.historico_pedido as h " + 
+			"where h.status in ('REALIZADO', 'PRONTO') " + 
+			"	and h.ocorrencia > (current_date -30) " + 
+			"group by h.pedido_id " + 
+			"having max(case when h.status = 'PRONTO' then h.ocorrencia end) is not null " + 
+			"union all " + 
+			"SELECT " + 
+			"	h.pedido_id, " + 
+			"	'Tempo p Entregar' tipo, " + 
+			"	max(case when h.status = 'ENTREGUE' then h.ocorrencia end ) - " + 
+			"	max(case when h.status = 'PRONTO' then h.ocorrencia end) tempodecorrido " + 
+			"FROM public.historico_pedido as h " + 
+			"where h.status in ('ENTREGUE', 'PRONTO') " + 
+			"	and h.ocorrencia > (current_date -30) " + 
+			"group by h.pedido_id " + 
+			"having max(case when h.status = 'ENTREGUE' then h.ocorrencia end) is not null) as a " + 
+			"group by a.tipo";
 	
 }

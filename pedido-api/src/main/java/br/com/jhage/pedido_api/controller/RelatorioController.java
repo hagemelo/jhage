@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhage.pedido_api.constante.ValoresConstantes;
 import br.com.jhage.pedido_api.dto.ItemVendaDto;
+import br.com.jhage.pedido_api.dto.TempoPedidoDto;
 import br.com.jhage.pedido_api.dto.VendaDTO;
 import br.com.jhage.pedido_api.excecao.PedidoException;
 import br.com.jhage.pedido_api.negocio.RelatorioON;
@@ -32,5 +33,12 @@ public class RelatorioController extends DefaultController{
 	public @ResponseBody Iterable<ItemVendaDto> itensPedidosDia(@PathVariable("datapedido") String dataPedido)  throws PedidoException{
 
 		return on.itenspedidosdia(dataPedido);
+	}
+	
+	
+	@GetMapping(path= ValoresConstantes.REQUESTMAPPING_TEMPO_PEDIDO)
+	public @ResponseBody Iterable<TempoPedidoDto> itensPedidosDia()  throws PedidoException{
+
+		return on.tempoDoPedido();
 	}
 }

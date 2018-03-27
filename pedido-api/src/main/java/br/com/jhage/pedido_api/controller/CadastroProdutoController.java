@@ -31,5 +31,7 @@ public class CadastroProdutoController extends DefaultController{
 		// This returns a JSON or XML with the users
 		return repository.findAll();
 	}
+	
+	
 
 }

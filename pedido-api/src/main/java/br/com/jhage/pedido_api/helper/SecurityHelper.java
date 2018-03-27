@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.util.Formatter;
 import java.util.UUID;
 
+import br.com.jhage.pedido_api.excecao.ByteToHexException;
 import br.com.jhage.pedido_api.excecao.PedidoException;
 
 /**
@@ -37,12 +38,17 @@ final public class SecurityHelper {
 	
 	protected static String byteToHex(final byte[] hash) throws PedidoException {
 		
-		@SuppressWarnings("resource")
-		final Formatter formatter = new Formatter();
-		for (final byte b : hash) {
-			formatter.format("%02x", b);
+		try {
+			@SuppressWarnings("resource")
+			final Formatter formatter = new Formatter();
+			for (final byte b : hash) {
+				formatter.format("%02x", b);
+			}
+			return formatter.toString();
+		}catch (Exception e) {
+			
+			throw new ByteToHexException();
 		}
-		return formatter.toString();
 	}
 	
 }

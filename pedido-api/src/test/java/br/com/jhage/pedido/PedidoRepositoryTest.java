@@ -64,7 +64,7 @@ public class PedidoRepositoryTest {
 		
 		String hoje = "";
 		try {
-			hoje = FormatDateHelper.converterDataParaCaracter(new Date());
+			hoje = FormatDateHelper.getInstance().converterDataParaCaracter(new Date());
 		
 		List<Pedido> pedidos = new ArrayList<Pedido>(repository.carregarPedidoPorData(hoje));
 		
