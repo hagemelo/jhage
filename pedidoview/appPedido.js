@@ -103,6 +103,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		   dadosPedido.produtos =  response.data;
 		});
 		prepararNovoPedido();
+		$scope.dadosPedido = dadosPedido;
 	};
 
 
