@@ -18,11 +18,13 @@ public class ItemVendaDto {
 	private Integer quantidade;
 	private Double percentual;
 	private Double total;
+	private Double desconto;
 	
 	private final int POSICAO_ITEM = 0; 
 	private final int POSICAO_QUANTIDADE = 1; 
 	private final int POSICAO_PERCENTUAL = 2; 
 	private final int POSICAO_TOTAL = 3; 
+	private final int POSICAO_DESCONTO = 4; 
 	
 	ItemVendaDto(){}
 	
@@ -32,6 +34,7 @@ public class ItemVendaDto {
 		quantidade 	= new Integer(ob[POSICAO_QUANTIDADE].toString());
 		percentual 	= new Double(ob[POSICAO_PERCENTUAL].toString());
 		total 		= new Double(ob[POSICAO_TOTAL].toString());
+		desconto	= new Double(ob[POSICAO_DESCONTO].toString());
 	}
 
 	public String getItem() {
@@ -50,16 +53,27 @@ public class ItemVendaDto {
 		return total;
 	}
 	
+	public Double getDesconto() {
+		return desconto;
+	}
+
+	
 	@JsonProperty
 	public String getPercentualToString() {
 		
-		return NumberHelp.parseDoubleToString(this.percentual * 100);
+		return NumberHelp.parseDoubleToString(this.getPercentual() * 100);
 	}
 	
 	@JsonProperty
 	public String getTotalToString() {
 		
-		return NumberHelp.parseDoubleToString(this.total);
+		return NumberHelp.parseDoubleToString(this.getTotal());
+	}
+	
+	@JsonProperty
+	public String getDescontoToString() {
+		
+		return NumberHelp.parseDoubleToString(this.getDesconto());
 	}
 	
 }

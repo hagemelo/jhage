@@ -1,5 +1,7 @@
 package br.com.jhage.pedido_api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,13 +35,13 @@ public class AtendimentoController extends DefaultController{
 	private AtendimentoON on;
 	
 	@GetMapping(path= "/pedidosdodia")
-	public @ResponseBody Iterable<Pedido> carregarPedidosDodia()  throws PedidoException{
+	public @ResponseBody List<Pedido> carregarPedidosDodia()  throws PedidoException{
 
 		return on.carregarPedidoDeHoje();
 	}
 	
 	@GetMapping(path= "/pedidoscancelados")
-	public @ResponseBody Iterable<Pedido> carregarPedidosCancelados()  throws PedidoException{
+	public @ResponseBody List<Pedido> carregarPedidosCancelados()  throws PedidoException{
 
 		return on.carregarPedidoCancelados();
 	}

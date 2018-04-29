@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @since 15/01/2017
  *
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum StatusPedido {
 	
 	REALIZADO,
@@ -22,6 +24,13 @@ public enum StatusPedido {
 	
 	private static Map<String, StatusPedido> namesMap = new HashMap<String, StatusPedido>();
 
+	static {
+		
+		for (StatusPedido e: StatusPedido.values()) {
+			namesMap.put(e.toString(), e); 
+		}
+	}
+	
 	
 	public static StatusPedido get(String find) {
 

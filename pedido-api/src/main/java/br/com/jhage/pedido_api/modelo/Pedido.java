@@ -65,6 +65,7 @@ public class Pedido implements JhageEntidade{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date cadastro;
 	
+	@JsonProperty
 	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
 	
@@ -97,8 +98,7 @@ public class Pedido implements JhageEntidade{
 	@JsonProperty
 	public String totalString(){
 		
-		Double result = itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
-		return  NumberHelp.parseDoubleToString(result == null? ValoresConstante.DOUBLE_ZERO: result);
+		return  NumberHelp.parseDoubleToString(this.total() == null? ValoresConstante.DOUBLE_ZERO: this.total());
 		
 	}
 	
@@ -111,12 +111,14 @@ public class Pedido implements JhageEntidade{
 	@JsonProperty
 	public String descontoString() {
 		
-		return NumberHelp.parseDoubleToString(this.desconto);
+		return NumberHelp.parseDoubleToString(this.getDesconto());
 	}
 	
 	public Double total(){
 		
-		return itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
+		Double total =  itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
+		total = total - this.getDesconto();
+		return total;
 	}
 	
 	public void addItemPedido(ItemPedido item) {
@@ -164,6 +166,10 @@ public class Pedido implements JhageEntidade{
 	
 	public Double getDesconto() {
 		
+		
+		if (Helper.ENULO.enulo(this.desconto)) {
+			this.desconto = ValoresConstante.DOUBLE_ZERO;
+		}
 		return desconto;
 	}
 

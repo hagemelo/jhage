@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @since 15/01/2017
  *
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Unidade  implements Serializable {
 	
 	KG,

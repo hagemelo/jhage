@@ -15,27 +15,27 @@ import br.com.jhage.pedido_api.PedidoApplication;
  *
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes=PedidoApplication.class, webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest(classes=PedidoApplication.class, webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CompraControllerTest {
 	
-
-	private IngredienteRepository()
-	
-	
-	@Test
-	public void deveCadastrarCompraSemDuplicarIngriente() {
+//
+//	private IngredienteRepository()
+//	
+//	
+//	@Test
+//	public void deveCadastrarCompraSemDuplicarIngriente() {
+//		
+//		
+//	}
+//	
+//	
+//	@Before
+//	public void prepareIngredientes() {
+//		
 		
 		
-	}
-	
-	
-	@Before
-	public void prepareIngredientes() {
-		
-		
-		
-	}
+//	}
 	
 
 }
