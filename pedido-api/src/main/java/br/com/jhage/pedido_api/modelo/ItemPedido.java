@@ -10,10 +10,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.jhage.pedido_api.constante.ValoresConstantes;
+import br.com.jhage.pedido_api.constante.ValoresConstante;
 import br.com.jhage.pedido_api.helper.Helper;
 import br.com.jhage.pedido_api.helper.NumberHelp;
 
@@ -23,6 +25,8 @@ import br.com.jhage.pedido_api.helper.NumberHelp;
  * @since 15/01/2017
  *
  */
+
+@Component
 @Entity
 @Table
 public class ItemPedido implements JhageEntidade{
@@ -54,9 +58,9 @@ private static final long serialVersionUID = 1L;
 	
 	public ItemPedido(String descricao, Double valor, Integer quantidade){
 		
-		this.quantidade = Helper.ENULO.enulo(quantidade)?ValoresConstantes.UM:quantidade;
-		this.valor 		= Helper.ENULO.enulo(valor)?ValoresConstantes.DOUBLE_ZERO:valor;
-		this.descricao 	= Helper.ENULO.enulo(descricao)?ValoresConstantes.STRING_VAZIO:descricao;
+		this.quantidade = Helper.ENULO.enulo(quantidade)?ValoresConstante.UM:quantidade;
+		this.valor 		= Helper.ENULO.enulo(valor)?ValoresConstante.DOUBLE_ZERO:valor;
+		this.descricao 	= Helper.ENULO.enulo(descricao)?ValoresConstante.STRING_VAZIO:descricao;
 	}
 	
 	@Override
@@ -87,7 +91,7 @@ private static final long serialVersionUID = 1L;
     
 	public Double total() {
 		
-		Double result =ValoresConstantes.DOUBLE_ZERO;
+		Double result =ValoresConstante.DOUBLE_ZERO;
 		if (this.isOKQuantidadeValor()){
 			result =  this.getValor() * this.getQuantidade();
 		}
@@ -114,7 +118,7 @@ private static final long serialVersionUID = 1L;
 		
 		return !Helper.ENULO.enulo(this.valor) 
 				&& !Helper.ENULO.enulo(this.quantidade) 
-				&& Double.doubleToRawLongBits(this.valor)!=ValoresConstantes.ZERO;
+				&& Double.doubleToRawLongBits(this.valor)!=ValoresConstante.ZERO;
 	}
 	
 	@Override

@@ -4,21 +4,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.jhage.pedido_api.helper.NumberHelp;
 
+/**
+ * 
+ * @author Alexsander Melo
+ * @since 11/02/2018
+ *
+ */
+
+
 public class ItemVendaDto {
 
-	String item;
-	Integer quantidade;
-	Double percentual;
-	Double total;
+	private String item;
+	private Integer quantidade;
+	private Double percentual;
+	private Double total;
+	
+	private final int POSICAO_ITEM = 0; 
+	private final int POSICAO_QUANTIDADE = 1; 
+	private final int POSICAO_PERCENTUAL = 2; 
+	private final int POSICAO_TOTAL = 3; 
 	
 	ItemVendaDto(){}
 	
 	public ItemVendaDto(Object[] ob) {
 		
-		item = ob[0].toString();
-		quantidade = new Integer(ob[1].toString());
-		percentual = new Double(ob[2].toString());
-		total = new Double(ob[3].toString());
+		item 		= ob[POSICAO_ITEM].toString();
+		quantidade 	= new Integer(ob[POSICAO_QUANTIDADE].toString());
+		percentual 	= new Double(ob[POSICAO_PERCENTUAL].toString());
+		total 		= new Double(ob[POSICAO_TOTAL].toString());
 	}
 
 	public String getItem() {

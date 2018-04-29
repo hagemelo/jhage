@@ -1,6 +1,7 @@
 package br.com.jhage.pedido_api.excecao;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -12,7 +13,7 @@ public class PedidoException extends Exception {
 	private static final String DEFAULT= "ERRRO_ACAO_ABRUPTA";
 
 	public Logger inicializarLogger() {
-		return Logger.getLogger(PedidoException.class);
+		return LogManager.getLogger(PedidoException.class);
 	}
 
 	public PedidoException() {

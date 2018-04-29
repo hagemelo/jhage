@@ -78,9 +78,9 @@ public class AtendimentoON {
 		return this.pedido;
 	}
 	
-	private void carregarPedidoPorId(long idpedido) {
+	private void carregarPedidoPorId(Long idpedido) {
 		
-		this.pedido = repository.findOne(idpedido);
+		this.pedido = repository.findById(idpedido).get();
 	}
 	
 	private void savarPedido() {

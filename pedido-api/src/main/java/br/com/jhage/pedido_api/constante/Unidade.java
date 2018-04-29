@@ -1,11 +1,15 @@
 package br.com.jhage.pedido_api.constante;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 
 /**
  * 
@@ -13,21 +17,24 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @since 15/01/2017
  *
  */
-public enum StatusPedido {
+public enum Unidade  implements Serializable {
 	
-	REALIZADO,
-	PRONTO,
-	ENTREGUE,
-	CANCELADO;
+	KG,
+	GR,
+	LT,
+	ML,
+	CX,
+	LA
+	;
 	
-	private static Map<String, StatusPedido> namesMap = new HashMap<String, StatusPedido>();
+	private static Map<String, Unidade> namesMap = new HashMap<String, Unidade>();
 
 	
-	public static StatusPedido get(String find) {
+	public static Unidade get(String find) {
 
-		StatusPedido result = REALIZADO;
+		Unidade result = KG;
 		try{
-			result  = valueOf(StatusPedido.class, find);
+			result  = valueOf(Unidade.class, find);
 		}catch (IllegalArgumentException e) {
 			
 			System.out.println("Tamanho Nao Encontrado");
@@ -37,18 +44,25 @@ public enum StatusPedido {
 	
 	
 	@JsonCreator
-    public static StatusPedido forValue(String value) {
+    public static Unidade forValue(String value) {
 		
         return namesMap.get(value);
     }
 	
+	public static Set<Unidade> getAll(){
+		
+		Set<Unidade> result = new HashSet<>();
+		namesMap.entrySet().forEach(e -> result.add(e.getValue()));
+		return result;
+	}
 	
 	@JsonValue
     public String toValue() {
-        for (Entry<String, StatusPedido> entry : namesMap.entrySet()) {
+        for (Entry<String, Unidade> entry : namesMap.entrySet()) {
             if (entry.getValue() == this)
                 return entry.getKey();
         }
         return null;
     }
+
 }

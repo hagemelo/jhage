@@ -18,6 +18,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -29,6 +31,7 @@ import br.com.jhage.pedido_api.constante.StatusPedido;
  * @since 18/02/2017
  *
  */
+@Component
 @Entity
 @Table
 public class HistoricoPedido implements JhageEntidade{

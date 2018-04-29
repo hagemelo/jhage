@@ -36,20 +36,21 @@ public class PedidoTest {
 	@Test
 	public void naoDevehaverNullnosCampos(){
 		
-		Pedido ped = new Pedido(null, null, null);
+		Pedido ped = new Pedido(null, null, null, null);
 		Assert.assertNotNull(ped.getCadastro());
 		Assert.assertNotNull(ped.getContato());
 		Assert.assertNotNull(ped.getItens());
 		Assert.assertNotNull(ped.getId());
 		Assert.assertNotNull(ped.getStatus());
 		Assert.assertNotNull(ped.getTroco());
+		Assert.assertNotNull(ped.getDesconto());
 		Assert.assertNotNull(ped.getEntrega());
 	}
 	
 	@Test
 	public void totalPedidoDeverSerIgualAoValorDefaulPedidoModelo1(){
 		
-		Pedido pedidoModelo1 = new Pedido("", "", 90.9);
+		Pedido pedidoModelo1 = new Pedido("", "", 90.9, 0.0);
 		pedidoModelo1.addItemPedido(new ItemPedido("Teste", 1.4, 2));
 		pedidoModelo1.addItemPedido(new ItemPedido("Teste", 2.8, null));
 		Assert.assertEquals(VALOR_DEFAUL, pedidoModelo1.total());
@@ -58,7 +59,7 @@ public class PedidoTest {
 	@Test
 	public void totalPedidoDeverSerIgualAoValorDefaulPedidoModelo2(){
 		
-		Pedido pedidoModelo2 = new Pedido("", "", 90.9);
+		Pedido pedidoModelo2 = new Pedido("", "", 90.9, 0.0);
 		pedidoModelo2.addItemPedido(new ItemPedido("Teste", 2.8, 1));
 		pedidoModelo2.addItemPedido(null);
 		pedidoModelo2.addItemPedido(new ItemPedido("Teste", 2.8, 1));
@@ -79,6 +80,6 @@ public class PedidoTest {
 	
 	private Pedido buildPedidoZero(){
 		
-		return new Pedido(null, null, null);
+		return new Pedido(null, null, null, null);
 	}
 }

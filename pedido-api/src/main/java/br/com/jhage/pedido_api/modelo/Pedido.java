@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.jhage.pedido_api.constante.StatusPedido;
-import br.com.jhage.pedido_api.constante.ValoresConstantes;
+import br.com.jhage.pedido_api.constante.ValoresConstante;
 import br.com.jhage.pedido_api.helper.Helper;
 import br.com.jhage.pedido_api.helper.NumberHelp;
 import br.com.jhage.pedido_api.listen.PedidoListen;
@@ -59,6 +59,8 @@ public class Pedido implements JhageEntidade{
 	
 	private Double troco;
 	
+	private Double desconto;
+	
 	@JsonFormat(pattern="dd/MM/YYYY")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date cadastro;
@@ -70,16 +72,16 @@ public class Pedido implements JhageEntidade{
 	@OneToMany(mappedBy = "pedido", cascade= CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
 	private Set<ItemPedido> itens;
 	
-	
 	Pedido(){
 		
 	}
 	
-	public Pedido(String contato , String entrega,  Double troco){
+	public Pedido(String contato , String entrega,  Double troco, Double desconto){
 	
-		this.contato = Helper.ENULO.enulo(contato)?ValoresConstantes.STRING_VAZIO:contato;
-		this.entrega = Helper.ENULO.enulo(entrega)?ValoresConstantes.STRING_VAZIO:entrega;
-		this.troco = Helper.ENULO.enulo(troco)?ValoresConstantes.DOUBLE_ZERO:troco;
+		this.contato = Helper.ENULO.enulo(contato)?ValoresConstante.STRING_VAZIO:contato;
+		this.entrega = Helper.ENULO.enulo(entrega)?ValoresConstante.STRING_VAZIO:entrega;
+		this.troco = Helper.ENULO.enulo(troco)?ValoresConstante.DOUBLE_ZERO:troco;
+		this.desconto = Helper.ENULO.enulo(desconto)?ValoresConstante.DOUBLE_ZERO:desconto;
 		this.status = StatusPedido.REALIZADO;
 		this.itens = new HashSet<ItemPedido>();
 		this.cadastro = new Date();
@@ -95,13 +97,21 @@ public class Pedido implements JhageEntidade{
 	@JsonProperty
 	public String totalString(){
 		
-		return NumberHelp.parseDoubleToString(itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum());
+		Double result = itens.stream().filter(Helper.NAO_E_NULO).mapToDouble(ItemPedido::total).sum();
+		return  NumberHelp.parseDoubleToString(result == null? ValoresConstante.DOUBLE_ZERO: result);
+		
 	}
 	
 	@JsonProperty
 	public String trocoString() {
 		
 		return NumberHelp.parseDoubleToString(this.troco);
+	}
+	
+	@JsonProperty
+	public String descontoString() {
+		
+		return NumberHelp.parseDoubleToString(this.desconto);
 	}
 	
 	public Double total(){
@@ -151,6 +161,11 @@ public class Pedido implements JhageEntidade{
 		
 		return troco;
 	}
+	
+	public Double getDesconto() {
+		
+		return desconto;
+	}
 
 	public StatusPedido getStatus() {
 		
@@ -179,13 +194,14 @@ public class Pedido implements JhageEntidade{
 		this.tratarNUllCadastro();
 		this.tratarNUllStatus();
 		this.tratarNullItens();
+		this.tratarNUllDesconto();
 	}
 	
 	private void tratarNUllContato(){
 	
 		if (Helper.ENULO.enulo(this.contato)){
 			
-			this.contato = ValoresConstantes.STRING_VAZIO;
+			this.contato = ValoresConstante.STRING_VAZIO;
 		}
 	}
 	
@@ -193,22 +209,34 @@ public class Pedido implements JhageEntidade{
 		
 		if (Helper.ENULO.enulo(this.entrega)){
 			
-			this.entrega = ValoresConstantes.STRING_VAZIO;
+			this.entrega = ValoresConstante.STRING_VAZIO;
 		}
 	}
 	
 	private void tratarNullItens() {
 		
 		Pedido p = this;
-		itens.stream().filter(i-> Helper.ENULO.enulo(i.getPedido())).forEach(i -> i.comPedido(p));
-//		itens.forEach(i -> i.comPedido(p));
+		if (!Helper.ENULO.enulo(itens)) {
+			itens.stream().filter(i-> Helper.ENULO.enulo(i.getPedido())).forEach(i -> i.comPedido(p));
+		}
+		else {
+			this.itens = new HashSet<ItemPedido>();
+		}
 	}
 
 	private void tratarNUllTroco(){
 
 		if (Helper.ENULO.enulo(this.troco)){
 			
-			this.troco = ValoresConstantes.DOUBLE_ZERO;
+			this.troco = ValoresConstante.DOUBLE_ZERO;
+		}
+	}
+	
+	private void tratarNUllDesconto(){
+
+		if (Helper.ENULO.enulo(this.desconto)){
+			
+			this.desconto = ValoresConstante.DOUBLE_ZERO;
 		}
 	}
 	
@@ -233,12 +261,13 @@ public class Pedido implements JhageEntidade{
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result	+ ((this.id == null) ? ValoresConstantes.ZERO : id.hashCode());
-		result = prime * result + ((this.contato == null) ? ValoresConstantes.ZERO : this.contato.hashCode());
-		result = prime * result + ((this.troco == null) ? ValoresConstantes.ZERO : this.troco.hashCode());
-		result = prime * result + ((this.entrega == null) ? ValoresConstantes.ZERO : this.entrega.hashCode());
-		result = prime * result + ((this.cadastro == null) ? ValoresConstantes.ZERO : this.cadastro.hashCode());
-		result = prime * result + ((this.status == null) ? ValoresConstantes.ZERO : this.status.hashCode());
+		result = prime * result	+ ((this.id == null) ? ValoresConstante.ZERO : id.hashCode());
+		result = prime * result + ((this.contato == null) ? ValoresConstante.ZERO : this.contato.hashCode());
+		result = prime * result + ((this.troco == null) ? ValoresConstante.ZERO : this.troco.hashCode());
+		result = prime * result + ((this.desconto == null) ? ValoresConstante.ZERO : this.desconto.hashCode());
+		result = prime * result + ((this.entrega == null) ? ValoresConstante.ZERO : this.entrega.hashCode());
+		result = prime * result + ((this.cadastro == null) ? ValoresConstante.ZERO : this.cadastro.hashCode());
+		result = prime * result + ((this.status == null) ? ValoresConstante.ZERO : this.status.hashCode());
 		return result;
 	}
 
