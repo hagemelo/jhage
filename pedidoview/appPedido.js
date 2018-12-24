@@ -25,6 +25,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	  		contato : "",
 			entrega : "",
 			troco : 0,
+			desconto: 0,
 			total : 0,
 	  		itens :[]
 	  	}	  	
@@ -36,6 +37,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		dadosPedido.novoPedido.contato = "";
 		dadosPedido.novoPedido.entrega = "";
 		dadosPedido.novoPedido.troco = 0;
+		dadosPedido.novoPedido.desconto = 0;
 		dadosPedido.novoPedido.quantidade = 1;
 		dadosPedido.produtoSelecionado =[];
 	  	dadosPedido.novoPedido.itens = [];
@@ -48,6 +50,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 		dadosPedido.novoPedido.contato = "";
 		dadosPedido.novoPedido.entrega = "";
 		dadosPedido.novoPedido.troco = 0;
+		dadosPedido.novoPedido.desconto = 0;
 		dadosPedido.novoPedido.total = 0;
 		dadosPedido.novoPedido.quantidade = 1;
 		dadosPedido.produtoSelecionado = [];
@@ -133,11 +136,13 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	};
 
 
+	
 	calcularTotalpedido = function(){
 
 		dadosPedido.totalPedido = 'R$ 0,00';
 		var valor = 0;
 		var troco = 0;
+		valor = valor - dadosPedido.novoPedido.desconto;
 		for (i in dadosPedido.novoPedido.itens){
 			valor = valor + (dadosPedido.novoPedido.itens[i].quantidade *  dadosPedido.novoPedido.itens[i].valor);
 			dadosPedido.totalPedido = 'R$ ' + valor;
@@ -151,7 +156,10 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 	};
 
 
+	$scope.calcularTotal = function(){
 
+		calcularTotalpedido(dadosPedido);
+	};
 
 
 	$scope.addpedido = function(novoPedido){
@@ -182,6 +190,7 @@ angular.module("appPedido").controller("pedidocontroller", function ($scope, $ht
 
 		$http.post("http://localhost:8080/atendimento/pedidopronto/" + pedido.id).then(function (response) {
 			
+
 			var mensagem = "Pedido (" + pedido.contato + " - " +  pedido.entrega + ")  Pronto!";
 			limparNovoPedido();
 			retornarconfigpadrao();

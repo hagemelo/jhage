@@ -28,7 +28,15 @@
   <div class="form-group row">
     <label for="Troco" class="col-sm-2 col-form-label">Troco Para</label>
     <div class="col-sm-6">
-      <input type="text" class="form-control" id="Troco" placeholder="Troco..." ng-model="dadosPedido.novoPedido.troco" onkeypress="onlydecimal(event)"/>
+      <input type="text" class="form-control" id="Troco" placeholder="Troco..." ng-model="dadosPedido.novoPedido.troco" onkeypress="onlydecimal(event)" ng-change="calcularTotal()" />
+    </div>
+  </div>
+
+  <!--DESCONTO-->
+  <div class="form-group row">
+    <label for="Desconto" class="col-sm-2 col-form-label">Desconto</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="Desconto" placeholder="Desconto..." ng-model="dadosPedido.novoPedido.desconto" onkeypress="onlydecimal(event)" ng-change="calcularTotal()"/>
     </div>
   </div>
 

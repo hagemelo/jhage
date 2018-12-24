@@ -40,7 +40,14 @@ angular.module("appCancelados").controller("canceladoscontroller", function ($sc
 
 	carregarPedidos();
 	
+	$scope.carregarItensPedido  = function(idpedido){
 
+		$http.get("http://localhost:8080/atendimento/itensdopedido/" + idpedido).then(function (response) {
+
+		  $scope.itensdopedido =  response.data;
+
+		});
+	};
 
 });
 
